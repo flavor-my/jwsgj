@@ -1,0 +1,27 @@
+# jwsgj 第三方依赖清单（SSOT）
+# 用法一：python -m jwsgj deps --install   （推荐：检测缺失后定向安装）
+# 用法二：pip install -r requirements.txt      （全量安装）
+# 纯检测：JWSGJ_SKIP_DEPS=1 python -m jwsgj deps --check --json
+# 注意：import 名与 pip 包名不一致的（PyYAML->yaml / z3-solver->z3）
+#       映射表维护在 diag_self_check.py 的 REQUIRED_DEPENDENCIES，两处需同步修改。
+#       v3.89.0 依赖瘦身：移除 requests（标准库 urllib 替代）/ Send2Trash（Shell API
+#       兜底）/ libcst（无引用的幽灵依赖）。依赖准入：标准库不可替代 + 缺失可降级。
+# git 为系统级工具（回归 CV 依赖），不在 pip 范围，由 diag_self_check.py 检测并提示。
+# 供应链声明：本文件是 bootstrap 灵活安装的最低版本约束清单（SSOT），非部署
+# 锁文件——hash 锁定（--hash=sha256）要求 == 精确钉死版本，与「缺失时可降级」
+# 的依赖准入原则（v3.89.0，环境缺包时按映射表逐包补装/降级）直接冲突，故有意
+# 不做 hash 锁定（SC-10 设计性豁免）；生产部署场景请用 pip-compile
+# --generate-hashes 另行生成锁文件。
+
+# ---- 运行时依赖（SSOT 与 diag_self_check._DEP_MODULE_MAP 对齐，导入时 ensure_runtime_deps 会自动补装）----
+PyYAML>=6.0
+psutil>=5.9
+tomli>=2.0; python_version < "3.11"
+z3-solver>=4.12
+coverage>=7.0
+pytest>=7.0
+
+# ---- 回归测试与 lint 工具链补充（不在运行时 SSOT 内，pytest.ini addopts 隐式依赖）----
+pytest-xdist>=3.0
+pytest-rerunfailures>=16.0
+ruff>=0.4

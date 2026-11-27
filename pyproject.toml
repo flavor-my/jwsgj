@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jwsgj"
+version = "3.336.0"
+description = "技能工具集：诊断 / 交叉验证 / 治疗 / 复盘 / 反哺全链路治理包"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+keywords = [
+    "diagnose", "audit", "refactor", "dead-code", "security", "taint",
+    "callgraph", "retrospective", "skill-audit",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
+]
+
+# 包根即技能根：``pyproject.toml`` 与 ``__init__.py`` 同目录，故用
+# ``package-dir`` 把「安装名 jwsgj」映射到「当前目录」。
+#
+# 这样做的唯一目的是**目录名与导入名解耦**：技能目录可以被改名/复制/
+# 迁移（如 ``governance-kernel``），``import jwsgj`` 仍然可用，1785 处
+# 绝对导入无需改动。若改为相对导入则是另一条路（改 1785 处），二者择一。
+[tool.setuptools]
+package-dir = { "jwsgj" = "." }
+packages = ["jwsgj"]
+include-package-data = false
+
+[tool.setuptools.exclude-package-data]
+"*" = ["tests/*", "log/*", "jinhua/*", "*.egg-info/*"]
+
+[tool.ruff]
+# ``tests/fixtures/probe/`` 存放**故意含缺陷**的漏报探针样本（通配符 import、
+# 未使用变量、裸 except、eval/exec、硬编码凭证……）。它们的存在意义就是触发规则，
+# 因此静态检查必须放过——否则每加一条缺陷模板都要写一堆 noqa，
+# 反而会让真正的 ruff 问题被淹没。
+extend-exclude = ["tests/fixtures/probe"]
