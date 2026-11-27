@@ -7,7 +7,8 @@ name = "jwsgj"
 version = "3.336.0"
 description = "技能工具集：诊断 / 交叉验证 / 治疗 / 复盘 / 反哺全链路治理包"
 requires-python = ">=3.10"
-license = { text = "Proprietary" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 keywords = [
     "diagnose", "audit", "refactor", "dead-code", "security", "taint",
     "callgraph", "retrospective", "skill-audit",
@@ -17,6 +18,14 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.12",
 ]
+
+[project.urls]
+Homepage = "https://github.com/flavor-my/jwsgj"
+Repository = "https://github.com/flavor-my/jwsgj"
+Issues = "https://github.com/flavor-my/jwsgj/issues"
+
+[project.scripts]
+jwsgj = "jwsgj.__main__:main"
 
 # 包根即技能根：``pyproject.toml`` 与 ``__init__.py`` 同目录，故用
 # ``package-dir`` 把「安装名 jwsgj」映射到「当前目录」。
@@ -28,6 +37,11 @@ classifiers = [
 package-dir = { "jwsgj" = "." }
 packages = ["jwsgj"]
 include-package-data = false
+
+# SKILL.md 是 AgentSkill 的入口文档，必须随 wheel 一起安装；
+# 否则 pip 安装版 self-check 会报 SKILL.md 缺失、无法作为技能加载。
+[tool.setuptools.package-data]
+"jwsgj" = ["SKILL.md", "skill_profile.json", "references/*.md"]
 
 [tool.setuptools.exclude-package-data]
 "*" = ["tests/*", "log/*", "jinhua/*", "*.egg-info/*"]
