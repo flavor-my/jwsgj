@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jwsgj"
 version = "3.336.0"
-description = "技能工具集：诊断 / 交叉验证 / 治疗 / 复盘 / 反哺全链路治理包"
+description = "面向 AgentSkill 与 Python 代码库的全链路治理内核：只读诊断与写盘执行严格分离，覆盖技能治理、代码诊断、安全、架构、清理、测试运行、重构治疗与交付门禁"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
